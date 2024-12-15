@@ -2,31 +2,31 @@ import sqlite3
 
 
 class DataBase:
-    def __init__(self, file):  # init - конструктор
-        self.con = sqlite3.connect(file)  # con - connection - соединение
-        self.cur = self.con.cursor()  # cur - cursor - обратная связь
-        self.create_table('score_players')
+    def __init__(self, file='data_base/players.db'):  # TODO
+        self.connection = sqlite3.connect(file)
+        self.cursor = self.connection.cursor()
 
     def create_table(self, table_name):
-        que_create = f'''
-        CREATE TABLE IF NOT EXIST {table_name} (
+        query_create = '''
+        CREATE TABLE IF NOT EXISTS {} (
             id INTEGER PRIMARY KEY,
             name TEXT,
-            score INTEGER,
+            score_points INTEGER
         )
-        '''
-        self.cur.execute(que_create)
-        self.con.commit()
+        '''.format(table_name)
+        self.cursor.execute(query_create)
+        self.connection.commit()
 
-    def get(self, query='SELECT * FROM score_players'):
-        return self.cur.execute(query).fetchall()
+    def get(self, query='SELECT * FROM scores'):
+        return self.cursor.execute(query).fetchall()
 
-    def insert(self, name, score):
-        que_insert = f'''INSERT INTO score_players (name, score)
-                        VALUES ('{name}', '{score}')
-                        '''
-        self.cur.execute(que_insert)
-        self.con.commit()
+    def insert(self, table_name, name, score):
+        query_insert = f'''INSERT INTO {table_name} (name, score_points) VALUES 
+            ('{name}', '{score}')
+            '''
+        self.cursor.execute(query_insert)
+        self.connection.commit()
 
-    def __del__(self):  # dell - диструктор
-        self.con.close()
+    def __del__(self):
+        print("Объект DataBase был уничтожен")
+        self.connection.close()

@@ -1,6 +1,6 @@
 # Класс объекта игрока
 import pygame as pg
-import game_config
+import HelperMan.game_config as game_config
 
 
 def load_img(name):
@@ -8,7 +8,7 @@ def load_img(name):
     img = img.convert()
     colorkey = img.get_at((0, 0))
     img.set_colorkey(colorkey)
-    img = pg.transform.scale(img, (100, 100))
+    img = pg.transform.scale(img, (50, 100))
     return img
 
 
@@ -16,16 +16,15 @@ class Helpers(pg.sprite.Sprite):
     def __init__(self, screen):
         pg.sprite.Sprite.__init__(self)
         self.screen = screen
-        self.image = load_img("Pictures/Helper-pixel_art1.png")
+        self.image = load_img("HelperMan/Pictures/Helper-pixel_art1.png")
         self.rect = self.image.get_rect()
-
         self.dino_bottom = screen.get_height() - game_config.BOTTOM_DINO
         self.rect.bottom = self.dino_bottom
         self.rect.centerx = 200
         self.speedx = 0
         # для прыжка
         self.is_jumping = False
-        self.jump_height = screen.get_height() - game_config.BOTTOM_DINO - 150
+        self.jump_height = self.dino_bottom - 150
         self.speedy = 10
 
     def update(self):
@@ -44,7 +43,7 @@ class Helpers(pg.sprite.Sprite):
             self.rect.left = 0
 
         # для прыжка
-        if not self.is_jumping:
+        if not self.is_jumping and self.rect.bottom == self.dino_bottom:
             if keys[pg.K_SPACE]:
                 self.is_jumping = True
 

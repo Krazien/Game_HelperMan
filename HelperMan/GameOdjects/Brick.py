@@ -3,7 +3,7 @@
 import pygame as pg
 import random
 
-import game_config
+import HelperMan.game_config as game_config
 
 
 def load_img(name):
@@ -11,7 +11,7 @@ def load_img(name):
     img = img.convert()
     colorkey = img.get_at((0, 0))
     img.set_colorkey(colorkey)
-    img = pg.transform.scale(img, (100, 100))
+    # img = pg.transform.scale(img, (100, 100))
     return img
 
 
@@ -19,7 +19,7 @@ class Brick(pg.sprite.Sprite):
     def __init__(self, screen):
         pg.sprite.Sprite.__init__(self)
         self.screen = screen
-        self.image = load_img(random.choice(["Pictures/kaktus_pixel_art1.png", "Pictures/kaktus_pixel_art.png2.png"]))
+        self.image = load_img(random.choice(["HelperMan/Pictures/kaktus_pixel_art1.png", "HelperMan/Pictures/kaktus_pixel_art.png2.png"]))
         self.rect = self.image.get_rect()
         self.rect.x = screen.get_width() + self.rect.width + random.randint(0, screen.get_width())
         self.rect.bottom = screen.get_height() - game_config.BOTTOM_DINO

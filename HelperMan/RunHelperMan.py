@@ -22,7 +22,7 @@ class HelperGame():
 
     def __init__(self):
         # Фон игры
-        self.background = load_img("Pictures/Песок.jpg")
+        self.background = load_img("HelperMan/Pictures/Песок.jpg")
         # Скорость обновления кадров
         self.__FPS = config.FPS
         self.__clock = pg.time.Clock()
@@ -61,17 +61,20 @@ class HelperGame():
             kaktus = Kaktuss(self.screen)
             self.all_sprites.add(kaktus)
 
-        # В начале игры будет всего 1 ящик
-        self.count_brick = 1
-        for i in range(self.count_brick):
-            # Объект астероида
+        # В начале игры будет всего 1 enemy
+        self.count_enemy = 1
+        for i in range(self.count_enemy):
+            # Объект
             brick = Brick(self.screen)
-            self.all_sprites.add(brick)
             self.bricks_spr_gr.add(brick)
+            self.all_sprites.add(brick)
 
     def __draw_scene(self):
         # отрисовка
         self.screen.blit(self.background, (0, 0))
+
+        self.bricks_spr_gr.update()
+        self.bricks_spr_gr.draw(self.screen)
 
         self.all_sprites.update()
         self.all_sprites.draw(self.screen)
@@ -102,14 +105,15 @@ class HelperGame():
             else:
                 exit()
         for brick in self.bricks_spr_gr:
-            if brick.rect.x < self.screen.get_width():
+            if brick.rect.x < 0:
                 self.__current_player_score += 1
                 self.bricks_spr_gr.remove(brick)
                 self.all_sprites.remove(brick)
+                # Через каждые 3 побежденных противника, добавляем еще одного
                 if self.__current_player_score % 3 == 0:
-                    self.__current_player_score += 1
+                    self.count_enemy += 1
 
-        if len(self.bricks_spr_gr) < self.count_brick:
+        if len(self.bricks_spr_gr) < self.count_enemy:
             newBrick = Brick(self.screen)
             self.all_sprites.add(newBrick)
             self.bricks_spr_gr.add(newBrick)

@@ -2,6 +2,7 @@ import pygame as pg
 
 import game_config
 import game_config as config
+from DataBase.Data_base import DataBase
 from game_dialog import GameDialog
 from GameOdjects.Brick import Brick
 from GameOdjects.Helper import Helpers
@@ -22,7 +23,7 @@ class HelperGame():
 
     def __init__(self):
         # Фон игры
-        self.background = load_img("HelperMan/Pictures/Песок.jpg")
+        self.background = load_img("Pictures/Песок.jpg")
         # Скорость обновления кадров
         self.__FPS = config.FPS
         self.__clock = pg.time.Clock()
@@ -30,10 +31,21 @@ class HelperGame():
         # Создаем объект класса GameDialog
         self.__game_dialog = GameDialog()
 
-        # self.__player_name = self.__game_dialog.show_dialog_login()
+        # Сохраняем имя игрока
+        self.__player_name = self.__game_dialog.show_dialog_login()
+
+        # Сохраняем игрока в базу данных
+        # TODO
+        self.data_baseManager = DataBase()
+        self.table_name = 'scores'
+        self.data_baseManager.create_table(self.table_name)
+
+        self.data_baseManager.insert(self.table_name, self.__player_name, 0)
 
         # Вызываем метод инициализациии остальных параметров
         self.__init_game()
+
+
 
     def __init_game(self):
 
@@ -61,23 +73,23 @@ class HelperGame():
             kaktus = Kaktuss(self.screen)
             self.all_sprites.add(kaktus)
 
-        # В начале игры будет всего 1 enemy
-        self.count_enemy = 1
-        for i in range(self.count_enemy):
-            # Объект
+        # В начале игры будет всего 1 ящик
+        self.count_brick = 1
+        for i in range(self.count_brick):
+            # Объект астероида
             brick = Brick(self.screen)
-            self.bricks_spr_gr.add(brick)
             self.all_sprites.add(brick)
+            self.bricks_spr_gr.add(brick)
 
     def __draw_scene(self):
         # отрисовка
         self.screen.blit(self.background, (0, 0))
 
-        self.bricks_spr_gr.update()
-        self.bricks_spr_gr.draw(self.screen)
-
         self.all_sprites.update()
         self.all_sprites.draw(self.screen)
+
+        self.bricks_spr_gr.update()
+        self.bricks_spr_gr.draw(self.screen)
 
         # self.__draw_score()
         self.check_collision()
@@ -100,6 +112,7 @@ class HelperGame():
     def check_collision(self):
         list_colid = pg.sprite.spritecollide(self.dino, self.bricks_spr_gr, False)
         if len(list_colid) > 0:
+            self.data_baseManager.update_player_data(self.table_name, self.__player_name, self.__current_player_score)
             if self.__game_dialog.show_dialog_game_over():
                 self.__init_game()
             else:
@@ -109,11 +122,10 @@ class HelperGame():
                 self.__current_player_score += 1
                 self.bricks_spr_gr.remove(brick)
                 self.all_sprites.remove(brick)
-                # Через каждые 3 побежденных противника, добавляем еще одного
                 if self.__current_player_score % 3 == 0:
-                    self.count_enemy += 1
+                    self.count_brick += 1
 
-        if len(self.bricks_spr_gr) < self.count_enemy:
+        if len(self.bricks_spr_gr) < self.count_brick:
             newBrick = Brick(self.screen)
             self.all_sprites.add(newBrick)
             self.bricks_spr_gr.add(newBrick)

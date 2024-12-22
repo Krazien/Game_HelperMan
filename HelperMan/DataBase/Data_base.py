@@ -2,7 +2,7 @@ import sqlite3
 
 
 class DataBase:
-    def __init__(self, file='data_base/players.db'):  # TODO
+    def __init__(self, file='DataBase/players.db'):  # TODO
         self.connection = sqlite3.connect(file)
         self.cursor = self.connection.cursor()
 
@@ -26,6 +26,10 @@ class DataBase:
             '''
         self.cursor.execute(query_insert)
         self.connection.commit()
+
+    def update_player_data(self, table_name, name, score):
+        query_update = f'''UPDATE {table_name} SET score_points={score} WHERE name=\'{name}\' '''
+        self.cursor.execute(query_update)
 
     def __del__(self):
         print("Объект DataBase был уничтожен")

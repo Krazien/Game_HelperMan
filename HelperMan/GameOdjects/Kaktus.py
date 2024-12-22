@@ -1,8 +1,9 @@
+
 # Класс кактус
 import pygame as pg
 import random
 
-import HelperMan.game_config as game_config
+import game_config as game_config
 
 
 def load_img(name):
@@ -18,7 +19,7 @@ class Kaktuss(pg.sprite.Sprite):
     def __init__(self, screen):
         pg.sprite.Sprite.__init__(self)
         self.screen = screen
-        self.image = load_img("HelperMan/Pictures/kaktus_pixel_art1.png")
+        self.image = load_img("Pictures/kaktus_pixel_art1 (1).png")
         self.rect = self.image.get_rect()
         self.rect.x = screen.get_width() + self.rect.width + random.randint(0, screen.get_width())
         self.rect.bottom = screen.get_height() - game_config.BOTTOM_KAKTUS

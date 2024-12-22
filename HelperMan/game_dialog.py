@@ -59,7 +59,7 @@ class GameDialog:
             pygame.draw.rect(self.__screen, 'gray', button_start)
             self.__screen.blit(start_text, button_start)
 
-            text_description = self.__font.render("Стань первым в этой беспощадной гонке!", True, 'black')
+            text_description = self.__font.render("Выживи в пустыне!", True, 'black')
             text_description_rect = text_description.get_rect(midleft=(config.WINDOW_SIZE[0] * 0.2, 230))
             self.__screen.blit(text_description, text_description_rect)
 

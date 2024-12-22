@@ -120,6 +120,7 @@ class HelperGame():
         for brick in self.bricks_spr_gr:
             if brick.rect.x < 0:
                 self.__current_player_score += 1
+                print(self.__current_player_score)
                 self.bricks_spr_gr.remove(brick)
                 self.all_sprites.remove(brick)
                 if self.__current_player_score % 3 == 0:

@@ -28,8 +28,10 @@ class DataBase:
         self.connection.commit()
 
     def update_player_data(self, table_name, name, score):
+        print(f'''UPDATE {table_name} SET score_points={score} WHERE name=\'{name}\' ''')
         query_update = f'''UPDATE {table_name} SET score_points={score} WHERE name=\'{name}\' '''
         self.cursor.execute(query_update)
+        self.connection.commit()
 
     def __del__(self):
         print("Объект DataBase был уничтожен")
